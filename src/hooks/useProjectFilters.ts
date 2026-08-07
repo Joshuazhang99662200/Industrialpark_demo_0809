@@ -4,20 +4,22 @@ import { MOCK_EXTENDED_PROJECTS } from "../data/projects";
 import { FilterCondition, Project } from "../types";
 import { parseCurrency } from "../lib/currency";
 
+/**
+ * 排序结果和搜索/筛选无关，模块加载时算一次即可。
+ * 放在 useMemo 里会导致每敲一个字都复制 + 排序 3596 条数据。
+ */
+const SORTED_PROJECTS: Project[] = [...MOCK_EXTENDED_PROJECTS].sort(
+  (a, b) => b.score - a.score
+);
+
 // 动态排序与算分逻辑 + 筛选逻辑
 export const useProjectFilters = (
   searchText: string,
   filterConditions: FilterCondition[]
 ): Project[] => {
   return useMemo(() => {
-    let projects = [...MOCK_EXTENDED_PROJECTS].map((project) => {
-      // Use existing pre-calculated score or recalculate if needed based on weights
-      // Here we trust the mock score for simplicity in display
-      return project;
-    });
-
-    // 1. 排序
-    projects.sort((a, b) => b.score - a.score);
+    // 1. 排序（已在模块加载时完成，这里直接用；filter 返回新数组，不会改到它）
+    let projects = SORTED_PROJECTS;
 
     // 2. 搜索过滤
     if (searchText.trim()) {
