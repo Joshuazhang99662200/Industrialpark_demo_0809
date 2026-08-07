@@ -251,6 +251,15 @@ export interface FilterCondition {
   logic: FilterLogic;
 }
 
+// ---------- 品牌名（集成控制器） ----------
+
+export interface BrandConfig {
+  /** 侧边栏顶部的平台名 */
+  platformName: string;
+  /** 租户视角下显示的园区名 */
+  parkName: string;
+}
+
 // ---------- 其它 ----------
 
 /** 环形图 / 图例的数据点 */

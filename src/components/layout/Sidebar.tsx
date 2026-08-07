@@ -14,18 +14,20 @@ import {
   Network,
 } from "lucide-react";
 
-import { TabKey } from "../../types";
+import { BrandConfig, TabKey } from "../../types";
 
 export const Sidebar = ({
   activeTab,
   onTabChange,
   isAdmin,
   onToggleRole,
+  brand,
 }: {
   activeTab: TabKey;
   onTabChange: (tab: TabKey) => void;
   isAdmin: boolean;
   onToggleRole: () => void;
+  brand: BrandConfig;
 }) => {
   return (
   <aside className="w-72 bg-slate-900 text-white flex flex-col shadow-2xl z-20 shrink-0">
@@ -35,7 +37,7 @@ export const Sidebar = ({
           <LayoutGrid size={20} strokeWidth={2.5} />
         </div>
         <span className="font-bold text-lg tracking-tight">
-          Acture 智能运营平台
+          {brand.platformName}
         </span>
       </div>
       {/* 身份状态指示器 */}
@@ -46,7 +48,7 @@ export const Sidebar = ({
           }`}
         />
         <span className="text-xs font-bold text-slate-300">
-          {isAdmin ? "超级管理员 (Admin)" : "云创未来产业园"}
+          {isAdmin ? "超级管理员 (Admin)" : brand.parkName}
         </span>
       </div>
     </div>

@@ -3,16 +3,18 @@ import {
   Zap,
 } from "lucide-react";
 
-import { TabKey } from "../../types";
+import { BrandConfig, TabKey } from "../../types";
 
 export const Header = ({
   activeTab,
   isAdmin,
   currentConfigName,
+  brand,
 }: {
   activeTab: TabKey;
   isAdmin: boolean;
   currentConfigName: string;
+  brand: BrandConfig;
 }) => {
   return (
     <header className="h-16 bg-white border-b border-slate-200 px-8 flex items-center justify-between z-10 shrink-0">
@@ -77,7 +79,7 @@ export const Header = ({
               当前身份
             </p>
             <p className="text-sm font-bold text-slate-700">
-              {isAdmin ? "超级管理员" : "云创未来产业园"}
+              {isAdmin ? "超级管理员" : brand.parkName}
             </p>
           </div>
           <div className="w-9 h-9 bg-slate-200 rounded-full flex items-center justify-center text-slate-500">
