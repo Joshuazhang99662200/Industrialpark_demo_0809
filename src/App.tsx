@@ -3,9 +3,7 @@ import { useState, useMemo, useEffect } from "react";
 import { MOCK_CONFIGS } from "./data/configs";
 import { MOCK_OLD_DATA } from "./data/operations";
 import { MOCK_EXTENDED_PROJECTS } from "./data/projects";
-import { loadBrand, saveBrand } from "./lib/brand";
 import {
-  BrandConfig,
   FilterCondition,
   FinancialTransactionFilter,
   Project,
@@ -85,14 +83,6 @@ export default function App() {
 
   // 生态服务分润的展开/折叠状态
   const [isEcoServiceExpanded, setIsEcoServiceExpanded] = useState(false);
-
-  // 品牌名（集成控制器），刷新后保持上次的设置
-  const [brand, setBrand] = useState<BrandConfig>(loadBrand);
-
-  const applyBrand = (next: BrandConfig) => {
-    setBrand(next);
-    saveBrand(next);
-  };
 
   const currentConfig = useMemo(
     () => configs.find((c) => c.id === activeConfigId) || configs[0],
@@ -187,8 +177,8 @@ export default function App() {
         activeTenant={activeTenant}
       />
 
-      {/* 集成控制器：改平台名 / 园区名 */}
-      <BrandController brand={brand} onApply={applyBrand} />
+      {/* 集成控制器面板：入口在侧边栏底部，状态走 BrandContext */}
+      <BrandController />
 
       {/* 侧边导航栏 */}
       <Sidebar
@@ -196,7 +186,6 @@ export default function App() {
         onTabChange={setActiveTab}
         isAdmin={isAdmin}
         onToggleRole={() => setIsAdmin(!isAdmin)}
-        brand={brand}
       />
 
       {/* 主内容区域 */}
@@ -205,7 +194,6 @@ export default function App() {
           activeTab={activeTab}
           isAdmin={isAdmin}
           currentConfigName={currentConfig.name}
-          brand={brand}
         />
 
         <div className="flex-1 overflow-auto p-8">

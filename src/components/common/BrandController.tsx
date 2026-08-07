@@ -1,24 +1,22 @@
 import { useEffect, useState } from "react";
-import { ChevronDown, RotateCcw, Settings, Sparkles } from "lucide-react";
+import { ChevronDown, RotateCcw, Sparkles } from "lucide-react";
 
+import { useBrand } from "../../context/BrandContext";
 import { DEFAULT_BRAND } from "../../lib/brand";
 import { BrandConfig } from "../../types";
 
 // ==========================================
 // --- 集成控制器：改园区 / 平台品牌名 ---
+// 入口在侧边栏底部（身份切换器下方），这里只负责面板本身。
+// 状态全部走 BrandContext，不接收任何 props。
 // ==========================================
 
-export const BrandController = ({
-  brand,
-  onApply,
-}: {
-  brand: BrandConfig;
-  onApply: (brand: BrandConfig) => void;
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
+export const BrandController = () => {
+  const { brand, setBrand, resetBrand, isControllerOpen, closeController } =
+    useBrand();
   const [draft, setDraft] = useState<BrandConfig>(brand);
 
-  // 外部（如恢复默认）改动品牌名时，同步回草稿
+  // 外部改动（恢复默认、其它标签页同步）时把草稿拉回来
   useEffect(() => {
     setDraft(brand);
   }, [brand]);
@@ -28,31 +26,24 @@ export const BrandController = ({
     draft.parkName !== brand.parkName;
 
   const handleApply = () => {
-    onApply({
+    setBrand({
       // 留空就回落到默认值，避免出现没有名字的空白标题
       platformName: draft.platformName.trim() || DEFAULT_BRAND.platformName,
       parkName: draft.parkName.trim() || DEFAULT_BRAND.parkName,
     });
   };
 
-  const handleReset = () => {
-    setDraft(DEFAULT_BRAND);
-    onApply(DEFAULT_BRAND);
-  };
+  // Esc 收起面板
+  useEffect(() => {
+    if (!isControllerOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") closeController();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [isControllerOpen, closeController]);
 
-  // 收起状态：侧边栏右侧的一个小胶囊按钮（避开侧边栏导航和配置页右下角的 FAB）
-  if (!isOpen) {
-    return (
-      <button
-        onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 left-[19.5rem] z-40 flex items-center gap-2 px-4 py-2.5 bg-slate-900 text-white rounded-xl shadow-2xl border border-slate-700 hover:bg-slate-800 transition-all text-xs font-bold"
-        title="修改平台名 / 园区名"
-      >
-        <Settings size={14} />
-        集成控制器
-      </button>
-    );
-  }
+  if (!isControllerOpen) return null;
 
   return (
     <div className="fixed bottom-6 left-[19.5rem] z-40 w-[460px] max-w-[calc(100vw-21rem)] bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden animate-in slide-in-from-bottom-2 duration-200">
@@ -62,13 +53,13 @@ export const BrandController = ({
           <Sparkles size={16} className="text-indigo-400" />
           <span className="text-sm font-black">集成控制器</span>
           <span className="text-[10px] text-slate-400 font-medium">
-            品牌名一处修改，全站生效
+            品牌名一处修改，全站生效并自动保存
           </span>
         </div>
         <button
-          onClick={() => setIsOpen(false)}
+          onClick={closeController}
           className="p-1.5 hover:bg-white/10 rounded-lg text-slate-300 transition-colors"
-          title="收起"
+          title="收起 (Esc)"
         >
           <ChevronDown size={18} />
         </button>
@@ -114,7 +105,7 @@ export const BrandController = ({
 
         <div className="mt-5 flex items-center justify-between gap-3">
           <button
-            onClick={handleReset}
+            onClick={resetBrand}
             className="flex items-center gap-1.5 px-3 py-2 text-xs font-bold text-slate-500 hover:text-slate-800 hover:bg-slate-100 rounded-lg transition-colors"
           >
             <RotateCcw size={13} />

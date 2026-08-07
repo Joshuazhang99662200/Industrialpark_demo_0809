@@ -3,19 +3,20 @@ import {
   Zap,
 } from "lucide-react";
 
-import { BrandConfig, TabKey } from "../../types";
+import { useBrand } from "../../context/BrandContext";
+import { TabKey } from "../../types";
 
 export const Header = ({
   activeTab,
   isAdmin,
   currentConfigName,
-  brand,
 }: {
   activeTab: TabKey;
   isAdmin: boolean;
   currentConfigName: string;
-  brand: BrandConfig;
 }) => {
+  const { brand } = useBrand();
+
   return (
     <header className="h-16 bg-white border-b border-slate-200 px-8 flex items-center justify-between z-10 shrink-0">
       <div className="flex items-center gap-4">

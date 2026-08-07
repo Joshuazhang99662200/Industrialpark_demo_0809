@@ -4,7 +4,8 @@ import { BrandConfig } from "../types";
 // --- 品牌名配置（集成控制器） ---
 // ==========================================
 
-const STORAGE_KEY = "acture.brand";
+/** localStorage 的键，context 监听 storage 事件时要用 */
+export const BRAND_STORAGE_KEY = "acture.brand";
 
 export const DEFAULT_BRAND: BrandConfig = {
   platformName: "Acture 智能运营平台",
@@ -14,7 +15,7 @@ export const DEFAULT_BRAND: BrandConfig = {
 /** 从 localStorage 读取品牌名，读不到或格式不对时回落到默认值 */
 export const loadBrand = (): BrandConfig => {
   try {
-    const raw = window.localStorage.getItem(STORAGE_KEY);
+    const raw = window.localStorage.getItem(BRAND_STORAGE_KEY);
     if (!raw) return DEFAULT_BRAND;
 
     const parsed = JSON.parse(raw) as Partial<BrandConfig>;
@@ -31,7 +32,7 @@ export const loadBrand = (): BrandConfig => {
 /** 写回 localStorage，失败时静默忽略（不影响当前会话的展示） */
 export const saveBrand = (brand: BrandConfig): void => {
   try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(brand));
+    window.localStorage.setItem(BRAND_STORAGE_KEY, JSON.stringify(brand));
   } catch {
     /* 忽略写入失败 */
   }

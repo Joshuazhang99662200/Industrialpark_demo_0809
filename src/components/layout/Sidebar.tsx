@@ -12,23 +12,25 @@ import {
   Handshake,
   Receipt,
   Network,
+  Settings,
 } from "lucide-react";
 
-import { BrandConfig, TabKey } from "../../types";
+import { useBrand } from "../../context/BrandContext";
+import { TabKey } from "../../types";
 
 export const Sidebar = ({
   activeTab,
   onTabChange,
   isAdmin,
   onToggleRole,
-  brand,
 }: {
   activeTab: TabKey;
   onTabChange: (tab: TabKey) => void;
   isAdmin: boolean;
   onToggleRole: () => void;
-  brand: BrandConfig;
 }) => {
+  const { brand, openController } = useBrand();
+
   return (
   <aside className="w-72 bg-slate-900 text-white flex flex-col shadow-2xl z-20 shrink-0">
     <div className="p-6">
@@ -229,14 +231,22 @@ export const Sidebar = ({
       </div>
     </nav>
 
-    {/* 身份切换器 */}
-    <div className="p-6 mt-auto border-t border-slate-800">
+    {/* 身份切换器 + 集成控制器入口 */}
+    <div className="p-6 mt-auto border-t border-slate-800 space-y-2">
       <button
         onClick={onToggleRole}
         className="w-full py-3 px-4 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2"
       >
         <RotateCcw size={14} />
         {isAdmin ? "切换至租户视角" : "切换至管理员视角"}
+      </button>
+      <button
+        onClick={openController}
+        title="修改平台名 / 园区名"
+        className="w-full py-3 px-4 bg-slate-800/60 hover:bg-slate-700 text-slate-400 hover:text-slate-200 border border-slate-700/60 rounded-xl text-xs font-bold transition-all flex items-center justify-center gap-2"
+      >
+        <Settings size={14} />
+        集成控制器
       </button>
     </div>
   </aside>
