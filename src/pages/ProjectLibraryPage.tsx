@@ -3,10 +3,19 @@ import {
   Search,
   X,
   Filter,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 import { SmartStatusBadge } from "../components/common/SmartStatusBadge";
 import { useProjectFilters } from "../hooks/useProjectFilters";
 import { FilterCondition, Project } from "../types";
+
+/**
+ * 每页行数。3596 行一次性渲染会产生 12 万个 DOM 节点、堆内存冲到 290MB，
+ * 录屏或多标签页场景下会直接把页面压崩，所以必须分页。
+ */
+const PAGE_SIZE = 50;
 
 export const ProjectLibraryPage = ({
   searchText,
@@ -24,6 +33,25 @@ export const ProjectLibraryPage = ({
   onSelectProject: (project: Project) => void;
 }) => {
   const projects = useProjectFilters(searchText, filterConditions);
+
+  const [page, setPage] = useState(1);
+  const totalPages = Math.max(1, Math.ceil(projects.length / PAGE_SIZE));
+
+  // 搜索或筛选条件变了就回到第一页，避免停在一个已经不存在的页码上
+  useEffect(() => {
+    setPage(1);
+  }, [searchText, filterConditions]);
+
+  // 结果集变少时把越界的页码拉回来
+  useEffect(() => {
+    setPage((p) => Math.min(p, totalPages));
+  }, [totalPages]);
+
+  const pageStart = (page - 1) * PAGE_SIZE;
+  const visibleProjects = useMemo(
+    () => projects.slice(pageStart, pageStart + PAGE_SIZE),
+    [projects, pageStart]
+  );
 
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
@@ -103,7 +131,10 @@ export const ProjectLibraryPage = ({
             </tr>
           </thead>
           <tbody className="divide-y divide-slate-100">
-            {projects.map((project, index) => (
+            {visibleProjects.map((project, index) => {
+              // 名次用全局序号，翻到第 2 页不能又从 1 数起
+              const rank = pageStart + index + 1;
+              return (
               <tr
                 key={project.id}
                 onClick={() => onSelectProject(project)}
@@ -112,16 +143,16 @@ export const ProjectLibraryPage = ({
                 <td className="px-6 py-4 text-center">
                   <div
                     className={`w-8 h-8 rounded-lg mx-auto flex items-center justify-center text-sm font-black ${
-                      index === 0
+                      rank === 1
                         ? "bg-amber-100 text-amber-600"
-                        : index === 1
+                        : rank === 2
                         ? "bg-slate-100 text-slate-600"
-                        : index === 2
+                        : rank === 3
                         ? "bg-orange-50 text-orange-600"
                         : "text-slate-400"
                     }`}
                   >
-                    {index + 1}
+                    {rank}
                   </div>
                 </td>
                 <td className="px-6 py-4">
@@ -214,9 +245,67 @@ export const ProjectLibraryPage = ({
                   </div>
                 </td>
               </tr>
-            ))}
+              );
+            })}
           </tbody>
         </table>
+
+        {/* 分页器 */}
+        <div className="flex items-center justify-between gap-4 px-6 py-4 border-t border-slate-100 bg-slate-50/50">
+          <div className="text-xs text-slate-500 tabular-nums">
+            {projects.length > 0 ? (
+              <>
+                显示第{" "}
+                <span className="font-bold text-slate-700">
+                  {pageStart + 1}–{Math.min(pageStart + PAGE_SIZE, projects.length)}
+                </span>{" "}
+                条，共{" "}
+                <span className="font-bold text-slate-700">
+                  {projects.length}
+                </span>{" "}
+                条
+              </>
+            ) : (
+              "没有符合条件的项目"
+            )}
+          </div>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setPage(1)}
+              disabled={page === 1}
+              className="px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 bg-white text-slate-600 hover:border-indigo-300 hover:text-indigo-600 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-slate-200 disabled:hover:text-slate-600 transition-all"
+            >
+              首页
+            </button>
+            <button
+              onClick={() => setPage((p) => Math.max(1, p - 1))}
+              disabled={page === 1}
+              className="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:border-indigo-300 hover:text-indigo-600 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-slate-200 disabled:hover:text-slate-600 transition-all"
+              title="上一页"
+            >
+              <ChevronLeft size={16} />
+            </button>
+            <span className="text-xs font-bold text-slate-600 tabular-nums px-2">
+              {page} / {totalPages}
+            </span>
+            <button
+              onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
+              disabled={page >= totalPages}
+              className="p-1.5 rounded-lg border border-slate-200 bg-white text-slate-600 hover:border-indigo-300 hover:text-indigo-600 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-slate-200 disabled:hover:text-slate-600 transition-all"
+              title="下一页"
+            >
+              <ChevronRight size={16} />
+            </button>
+            <button
+              onClick={() => setPage(totalPages)}
+              disabled={page >= totalPages}
+              className="px-3 py-1.5 rounded-lg text-xs font-bold border border-slate-200 bg-white text-slate-600 hover:border-indigo-300 hover:text-indigo-600 disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:border-slate-200 disabled:hover:text-slate-600 transition-all"
+            >
+              末页
+            </button>
+          </div>
+        </div>
       </div>
 
       {/* 批量上传按钮 */}
