@@ -40,12 +40,12 @@ export const BrandController = ({
     onApply(DEFAULT_BRAND);
   };
 
-  // 收起状态：左下角一个小胶囊按钮
+  // 收起状态：侧边栏右侧的一个小胶囊按钮（避开侧边栏导航和配置页右下角的 FAB）
   if (!isOpen) {
     return (
       <button
         onClick={() => setIsOpen(true)}
-        className="fixed bottom-6 left-6 z-40 flex items-center gap-2 px-4 py-2.5 bg-slate-900 text-white rounded-xl shadow-2xl border border-slate-700 hover:bg-slate-800 transition-all text-xs font-bold"
+        className="fixed bottom-6 left-[19.5rem] z-40 flex items-center gap-2 px-4 py-2.5 bg-slate-900 text-white rounded-xl shadow-2xl border border-slate-700 hover:bg-slate-800 transition-all text-xs font-bold"
         title="修改平台名 / 园区名"
       >
         <Settings size={14} />
@@ -55,7 +55,7 @@ export const BrandController = ({
   }
 
   return (
-    <div className="fixed bottom-6 left-6 z-40 w-[460px] max-w-[calc(100vw-3rem)] bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden animate-in slide-in-from-bottom-2 duration-200">
+    <div className="fixed bottom-6 left-[19.5rem] z-40 w-[460px] max-w-[calc(100vw-21rem)] bg-white rounded-2xl shadow-2xl border border-slate-200 overflow-hidden animate-in slide-in-from-bottom-2 duration-200">
       {/* 标题栏 */}
       <div className="px-5 py-3.5 bg-slate-900 text-white flex items-center justify-between">
         <div className="flex items-center gap-2">
