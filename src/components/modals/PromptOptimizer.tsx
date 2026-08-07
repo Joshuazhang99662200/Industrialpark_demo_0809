@@ -1,4 +1,6 @@
 import { useState } from "react";
+
+import { ChatMessage, ScoringConfig } from "../../types";
 import {
   FileText,
   Plus,
@@ -13,8 +15,16 @@ import {
 // --- 组件: Prompt Optimizer (Gemini Studio Layout) ---
 // ==========================================
 
-export const PromptOptimizer = ({ onClose, onGenerate, allConfigs }) => {
-  const [messages, setMessages] = useState([
+export const PromptOptimizer = ({
+  onClose,
+  onGenerate,
+  allConfigs,
+}: {
+  onClose: () => void;
+  onGenerate: (config: ScoringConfig) => void;
+  allConfigs: ScoringConfig[];
+}) => {
+  const [messages, setMessages] = useState<ChatMessage[]>([
     {
       role: "ai",
       content:
@@ -26,8 +36,10 @@ export const PromptOptimizer = ({ onClose, onGenerate, allConfigs }) => {
 
   const handleSend = () => {
     if (!input.trim()) return;
-    const newMsgs = [...messages, { role: "user", content: input }];
-    // @ts-ignore
+    const newMsgs: ChatMessage[] = [
+      ...messages,
+      { role: "user", content: input },
+    ];
     setMessages(newMsgs);
     setInput("");
 
@@ -47,7 +59,7 @@ export const PromptOptimizer = ({ onClose, onGenerate, allConfigs }) => {
   };
 
   const handleGenerateConfirm = () => {
-    const newConfig = {
+    const newConfig: ScoringConfig = {
       id: `CONF-NEW-${Date.now()}`,
       name: "AI 生成-定制化筛选",
       description: "由配置助手根据您的对话自动生成。",

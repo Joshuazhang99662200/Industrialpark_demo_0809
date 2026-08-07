@@ -4,12 +4,20 @@ import {
   Power,
 } from "lucide-react";
 
+import { ScoringConfig } from "../types";
+
 export const ConfigsPage = ({
   configs,
   activeConfigId,
   onEditConfig,
   onActivateConfig,
   onCreateConfig,
+}: {
+  configs: ScoringConfig[];
+  activeConfigId: string;
+  onEditConfig: (config: ScoringConfig) => void;
+  onActivateConfig: (id: string) => void;
+  onCreateConfig: () => void;
 }) => {
   return (
     <div className="space-y-6 relative h-full">

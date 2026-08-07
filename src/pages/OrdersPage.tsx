@@ -1,6 +1,13 @@
 import { SmartStatusBadge } from "../components/common/SmartStatusBadge";
+import { PointOrder } from "../types";
 
-export const OrdersPage = ({ orders, isAdmin }) => {
+export const OrdersPage = ({
+  orders,
+  isAdmin,
+}: {
+  orders: PointOrder[];
+  isAdmin: boolean;
+}) => {
   return (
     <div className="bg-white rounded-[24px] border border-slate-200 shadow-sm overflow-hidden animate-in fade-in duration-500">
       <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">

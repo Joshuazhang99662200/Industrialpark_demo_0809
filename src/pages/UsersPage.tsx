@@ -4,8 +4,15 @@ import {
   Trash2,
 } from "lucide-react";
 import { SmartStatusBadge } from "../components/common/SmartStatusBadge";
+import { SystemUser } from "../types";
 
-export const UsersPage = ({ users, isAdmin }) => {
+export const UsersPage = ({
+  users,
+  isAdmin,
+}: {
+  users: SystemUser[];
+  isAdmin: boolean;
+}) => {
   return (
     <div className="bg-white rounded-[24px] border border-slate-200 shadow-sm overflow-hidden animate-in fade-in duration-500">
       <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">

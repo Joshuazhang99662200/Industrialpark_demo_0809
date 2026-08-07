@@ -1,4 +1,6 @@
 import React from "react";
+
+import { Tenant } from "../../types";
 import {
   X,
   AlertCircle,
@@ -54,7 +56,15 @@ export const QuotaDrawer = ({
 };
 
 // 点数调整抽屉 (配额管理页专用)
-export const QuotaAdjustDrawer = ({ isOpen, onClose, activeTenant }) => {
+export const QuotaAdjustDrawer = ({
+  isOpen,
+  onClose,
+  activeTenant,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+  activeTenant: Tenant | null;
+}) => {
   return (
     <QuotaDrawer
       isOpen={isOpen}

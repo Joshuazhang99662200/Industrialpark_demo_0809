@@ -14,7 +14,19 @@ import {
   Network,
 } from "lucide-react";
 
-export const Sidebar = ({ activeTab, onTabChange, isAdmin, onToggleRole }) => {
+import { TabKey } from "../../types";
+
+export const Sidebar = ({
+  activeTab,
+  onTabChange,
+  isAdmin,
+  onToggleRole,
+}: {
+  activeTab: TabKey;
+  onTabChange: (tab: TabKey) => void;
+  isAdmin: boolean;
+  onToggleRole: () => void;
+}) => {
   return (
   <aside className="w-72 bg-slate-900 text-white flex flex-col shadow-2xl z-20 shrink-0">
     <div className="p-6">

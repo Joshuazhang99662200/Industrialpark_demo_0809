@@ -1,4 +1,6 @@
 import { useState, useEffect } from "react";
+
+import { FilterCondition } from "../../types";
 import {
   Plus,
   X,
@@ -18,10 +20,12 @@ export const AdvancedFilterModal = ({
 }: {
   isOpen: boolean;
   onClose: () => void;
-  onApply: (conditions: any[]) => void;
-  initialConditions: any[];
+  onApply: (conditions: FilterCondition[]) => void;
+  initialConditions: FilterCondition[];
 }) => {
-  const [conditions, setConditions] = useState(initialConditions);
+  const [conditions, setConditions] = useState<FilterCondition[]>(
+    initialConditions
+  );
 
   // 初始化，如果没有条件则默认添加一个
   useEffect(() => {
@@ -54,12 +58,18 @@ export const AdvancedFilterModal = ({
   };
 
   const removeCondition = (id: string) => {
-    setConditions(conditions.filter((c: any) => c.id !== id));
+    setConditions(conditions.filter((c) => c.id !== id));
   };
 
-  const updateCondition = (id: string, key: string, val: any) => {
+  const updateCondition = (
+    id: string,
+    key: keyof FilterCondition,
+    val: string
+  ) => {
     setConditions(
-      conditions.map((c: any) => (c.id === id ? { ...c, [key]: val } : c))
+      conditions.map((c) =>
+        c.id === id ? ({ ...c, [key]: val } as FilterCondition) : c
+      )
     );
   };
 

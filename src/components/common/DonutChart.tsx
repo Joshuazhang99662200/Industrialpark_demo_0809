@@ -1,10 +1,12 @@
+import { ChartDatum } from "../../types";
+
 // --- 环形图组件 (SVG Donut Chart) ---
 export const DonutChart = ({
   data,
   size = 160,
   thickness = 20,
 }: {
-  data: any[];
+  data: ChartDatum[];
   size?: number;
   thickness?: number;
 }) => {

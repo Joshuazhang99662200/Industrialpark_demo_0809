@@ -6,6 +6,7 @@ import {
 } from "lucide-react";
 import { SmartStatusBadge } from "../components/common/SmartStatusBadge";
 import { useProjectFilters } from "../hooks/useProjectFilters";
+import { FilterCondition, Project } from "../types";
 
 export const ProjectLibraryPage = ({
   searchText,
@@ -14,6 +15,13 @@ export const ProjectLibraryPage = ({
   onOpenFilter,
   onOpenBatchUpload,
   onSelectProject,
+}: {
+  searchText: string;
+  onSearchTextChange: (value: string) => void;
+  filterConditions: FilterCondition[];
+  onOpenFilter: () => void;
+  onOpenBatchUpload: () => void;
+  onSelectProject: (project: Project) => void;
 }) => {
   const projects = useProjectFilters(searchText, filterConditions);
 

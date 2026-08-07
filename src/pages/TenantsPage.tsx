@@ -2,8 +2,9 @@ import {
   Building2,
 } from "lucide-react";
 import { SmartStatusBadge } from "../components/common/SmartStatusBadge";
+import { Tenant } from "../types";
 
-export const TenantsPage = ({ tenants }) => {
+export const TenantsPage = ({ tenants }: { tenants: Tenant[] }) => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 animate-in fade-in duration-500">
       {tenants.map((tenant) => (

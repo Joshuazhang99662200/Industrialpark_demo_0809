@@ -1,7 +1,14 @@
+import {
+  EcosystemPartner,
+  EcosystemServiceRecord,
+  EcosystemServiceRequest,
+  EcosystemTransaction,
+} from "../types";
+
 // ==========================================
 // --- 1.2.1 生态流水数据 (取消三大货架概念) ---
 // ==========================================
-export const ECOSYSTEM_TRANSACTIONS = [
+export const ECOSYSTEM_TRANSACTIONS: EcosystemTransaction[] = [
   {
     id: "ECO-20240101-001",
     projectName: "智航低空物流网络",
@@ -127,7 +134,7 @@ export const ECOSYSTEM_TRANSACTIONS = [
 // ==========================================
 // --- 1.3 生态服务需求数据 (取消三大货架概念，serviceType直接作为一级标签) ---
 // ==========================================
-export const ECOSYSTEM_SERVICE_REQUESTS = [
+export const ECOSYSTEM_SERVICE_REQUESTS: EcosystemServiceRequest[] = [
   {
     id: "ECO-REQ-001",
     companyName: "智航低空物流网络",
@@ -256,7 +263,7 @@ export const ECOSYSTEM_SERVICE_REQUESTS = [
 // ==========================================
 // --- 1.4 生态资源方数据 ---
 // ==========================================
-export const ECOSYSTEM_PARTNERS = [
+export const ECOSYSTEM_PARTNERS: EcosystemPartner[] = [
   {
     id: "PARTNER-001",
     name: "猎聘",
@@ -382,7 +389,7 @@ export const ECOSYSTEM_PARTNERS = [
 // ==========================================
 // --- 1.5 生态服务记录数据 ---
 // ==========================================
-export const ECOSYSTEM_SERVICE_RECORDS = [
+export const ECOSYSTEM_SERVICE_RECORDS: EcosystemServiceRecord[] = [
   {
     id: "RECORD-001",
     partnerId: "PARTNER-002",

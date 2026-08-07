@@ -1,7 +1,9 @@
+import { ScoringConfig } from "../types";
+
 // ==========================================
 // --- 2. 核心业务配置数据 (MOCK_CONFIGS) ---
 // ==========================================
-export const MOCK_CONFIGS = [
+export const MOCK_CONFIGS: ScoringConfig[] = [
   {
     id: "CONF-001",
     name: "低空经济专项基金遴选",

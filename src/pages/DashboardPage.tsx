@@ -10,12 +10,13 @@ import {
   MapPin,
 } from "lucide-react";
 import { DonutChart } from "../components/common/DonutChart";
+import { Project } from "../types";
 
 /// ==========================================
 // --- 组件: 仪表盘 (Dashboard) - 完整版 ---
 // ==========================================
 
-export const DashboardPage = ({ projects }) => {
+export const DashboardPage = ({ projects }: { projects: Project[] }) => {
   const totalProjects = projects.length;
   const thisMonthCount = projects.filter((p) =>
     p.submitTime.includes("2024-02")
@@ -25,44 +26,53 @@ export const DashboardPage = ({ projects }) => {
   // --- 1. 数据统计逻辑 ---
 
   // A. 赛道分布
-  const trackDistribution = projects.reduce((acc: any, curr) => {
-    acc[curr.track] = (acc[curr.track] || 0) + 1;
-    return acc;
-  }, {});
+  const trackDistribution = projects.reduce<Record<string, number>>(
+    (acc, curr) => {
+      acc[curr.track] = (acc[curr.track] || 0) + 1;
+      return acc;
+    },
+    {}
+  );
   const trackData = Object.entries(trackDistribution)
     .map(([name, value]) => ({ name, value: value as number }))
     .sort((a, b) => b.value - a.value);
 
   // B. 融资轮次分布
-  const fundingDistribution = projects.reduce((acc: any, curr) => {
-    let key = "其他";
-    if (curr.funding.includes("种子") || curr.funding.includes("天使"))
-      key = "种子/天使轮";
-    else if (curr.funding.includes("A轮") || curr.funding.includes("Pre-A"))
-      key = "A轮阶段";
-    else if (curr.funding.includes("B轮")) key = "B轮及以后";
-    acc[key] = (acc[key] || 0) + 1;
-    return acc;
-  }, {});
+  const fundingDistribution = projects.reduce<Record<string, number>>(
+    (acc, curr) => {
+      let key = "其他";
+      if (curr.funding.includes("种子") || curr.funding.includes("天使"))
+        key = "种子/天使轮";
+      else if (curr.funding.includes("A轮") || curr.funding.includes("Pre-A"))
+        key = "A轮阶段";
+      else if (curr.funding.includes("B轮")) key = "B轮及以后";
+      acc[key] = (acc[key] || 0) + 1;
+      return acc;
+    },
+    {}
+  );
   const fundingData = Object.entries(fundingDistribution)
     .map(([name, value]) => ({ name, value: value as number }))
     .sort((a, b) => b.value - a.value);
 
   // C. 区域来源分布 (环形图逻辑)
-  const locationDistribution = projects.reduce((acc: any, curr) => {
-    let region = curr.location.split("·")[0];
-    if (curr.location.includes("北京")) region = "北京";
-    else if (curr.location.includes("上海")) region = "上海";
-    else if (curr.location.includes("深圳") || curr.location.includes("广州"))
-      region = "广东";
-    else if (curr.location.includes("苏州") || curr.location.includes("南京"))
-      region = "江苏";
-    else if (curr.location.includes("杭州")) region = "浙江";
-    else if (curr.location.includes("成都")) region = "四川";
+  const locationDistribution = projects.reduce<Record<string, number>>(
+    (acc, curr) => {
+      let region = curr.location.split("·")[0];
+      if (curr.location.includes("北京")) region = "北京";
+      else if (curr.location.includes("上海")) region = "上海";
+      else if (curr.location.includes("深圳") || curr.location.includes("广州"))
+        region = "广东";
+      else if (curr.location.includes("苏州") || curr.location.includes("南京"))
+        region = "江苏";
+      else if (curr.location.includes("杭州")) region = "浙江";
+      else if (curr.location.includes("成都")) region = "四川";
 
-    acc[region] = (acc[region] || 0) + 1;
-    return acc;
-  }, {});
+      acc[region] = (acc[region] || 0) + 1;
+      return acc;
+    },
+    {}
+  );
 
   let locationDataSorted = Object.entries(locationDistribution)
     .map(([name, value]) => ({ name, value: value as number }))
@@ -326,13 +336,13 @@ export const DashboardPage = ({ projects }) => {
         </h3>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {Object.entries(qualityStats).map(([key, val]) => {
-            const labels: any = {
+            const labels: Record<string, string> = {
               s: "S级 (极优)",
               a: "A级 (推荐)",
               b: "B级 (储备)",
               c: "C级 (观察)",
             };
-            const colors: any = {
+            const colors: Record<string, string> = {
               s: "text-rose-600 bg-rose-50",
               a: "text-indigo-600 bg-indigo-50",
               b: "text-emerald-600 bg-emerald-50",

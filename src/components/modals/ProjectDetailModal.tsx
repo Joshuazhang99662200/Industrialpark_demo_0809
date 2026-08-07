@@ -1,4 +1,6 @@
 import { useState, useMemo } from "react";
+
+import { Project, ScoringConfig } from "../../types";
 import {
   FileText,
   ShoppingCart,
@@ -30,7 +32,17 @@ import { SmartStatusBadge } from "../common/SmartStatusBadge";
 // --- 组件: 项目详情透视 (最终完善版：含联系人+详细评分) ---
 // ==========================================
 
-export const ProjectDetailModal = ({ project, config, onClose, isAdmin }) => {
+export const ProjectDetailModal = ({
+  project,
+  config,
+  onClose,
+  isAdmin,
+}: {
+  project: Project;
+  config: ScoringConfig;
+  onClose: () => void;
+  isAdmin: boolean;
+}) => {
   const [isScoreDetailsOpen, setIsScoreDetailsOpen] = useState(true); // 默认展开评分详情，方便查看
 
   // 模拟生成 100-150 字的项目简介

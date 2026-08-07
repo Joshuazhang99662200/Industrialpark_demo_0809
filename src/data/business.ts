@@ -1,9 +1,11 @@
+import { BusinessOrder } from "../types";
+
 // ==========================================
 // ==========================================
 // --- 1.2 业务流水数据 ---
 // 分润规则：Uni(299元, 30%), DUO(599元, 35%), Tri(1999元, 30%), Omni(1299元, 35%)
 // ==========================================
-export const BUSINESS_ORDERS = [
+export const BUSINESS_ORDERS: BusinessOrder[] = [
   {
     id: "BIZ-20240101-001",
     uploader: "张三",

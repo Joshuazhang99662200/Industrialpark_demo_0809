@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   FileText,
   Download,
@@ -10,13 +10,19 @@ import {
 // --- 组件: 批量上传模态框 ---
 // ==========================================
 
-export const BatchUploadModal = ({ isOpen, onClose }) => {
+export const BatchUploadModal = ({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) => {
   const [uploadedFiles, setUploadedFiles] = useState<File[]>([]);
   const [dragActive, setDragActive] = useState(false);
 
   if (!isOpen) return null;
 
-  const handleDrag = (e) => {
+  const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
     if (e.type === "dragenter" || e.type === "dragover") {
@@ -26,7 +32,7 @@ export const BatchUploadModal = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleDrop = (e) => {
+  const handleDrop = (e: React.DragEvent) => {
     e.preventDefault();
     e.stopPropagation();
     setDragActive(false);
@@ -36,14 +42,14 @@ export const BatchUploadModal = ({ isOpen, onClose }) => {
     }
   };
 
-  const handleFileInput = (e) => {
+  const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files.length > 0) {
       const newFiles = Array.from(e.target.files);
       setUploadedFiles((prev) => [...prev, ...newFiles]);
     }
   };
 
-  const removeFile = (index) => {
+  const removeFile = (index: number) => {
     setUploadedFiles((prev) => prev.filter((_, i) => i !== index));
   };
 

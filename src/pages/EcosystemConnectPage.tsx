@@ -17,6 +17,13 @@ export const EcosystemConnectPage = ({
   onServiceTypeChange,
   status,
   onStatusChange,
+}: {
+  searchText: string;
+  onSearchTextChange: (value: string) => void;
+  serviceType: string;
+  onServiceTypeChange: (value: string) => void;
+  status: string;
+  onStatusChange: (value: string) => void;
 }) => {
   // 生态对接筛选逻辑
   const requests = useMemo(() => {

@@ -1,10 +1,14 @@
 import { useMemo } from "react";
 
 import { MOCK_EXTENDED_PROJECTS } from "../data/projects";
+import { FilterCondition, Project } from "../types";
 import { parseCurrency } from "../lib/currency";
 
 // 动态排序与算分逻辑 + 筛选逻辑
-export const useProjectFilters = (searchText, filterConditions) => {
+export const useProjectFilters = (
+  searchText: string,
+  filterConditions: FilterCondition[]
+): Project[] => {
   return useMemo(() => {
     let projects = [...MOCK_EXTENDED_PROJECTS].map((project) => {
       // Use existing pre-calculated score or recalculate if needed based on weights
@@ -22,7 +26,8 @@ export const useProjectFilters = (searchText, filterConditions) => {
         return (
           project.name.toLowerCase().includes(searchLower) ||
           project.companyName?.toLowerCase().includes(searchLower) ||
-          project.uploaderName.toLowerCase().includes(searchLower) ||
+          // TODO: 部分种子数据没有 uploaderName，这里先维持原有行为
+          (project.uploaderName as string).toLowerCase().includes(searchLower) ||
           project.id.toLowerCase().includes(searchLower) ||
           project.track.toLowerCase().includes(searchLower) ||
           project.tags.some((tag) => tag.toLowerCase().includes(searchLower))
@@ -36,10 +41,10 @@ export const useProjectFilters = (searchText, filterConditions) => {
         let result = true;
 
         for (let i = 0; i < filterConditions.length; i++) {
-          const cond: any = filterConditions[i];
+          const cond = filterConditions[i];
           let conditionMet = false;
 
-          const valStr = String((project as any)[cond.field] || "");
+          const valStr = String(project[cond.field] || "");
           const filterValStr = cond.value;
 
           if (["revenue", "profit"].includes(cond.field)) {

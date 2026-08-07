@@ -1,4 +1,6 @@
 import { useState, useMemo } from "react";
+
+import { ChatMessage, ScoringConfig, WeightItem } from "../../types";
 import {
   Sliders,
   Sparkles,
@@ -21,13 +23,26 @@ export const ConfigDetailEditor = ({
   onClose,
   onUpdate,
   onApply,
+}: {
+  config: ScoringConfig;
+  allConfigs: ScoringConfig[];
+  onClose: () => void;
+  onUpdate: (
+    id: string,
+    weights: WeightItem[],
+    prompt: string,
+    isNewVersion: boolean
+  ) => void;
+  onApply: (id: string) => void;
 }) => {
   const [localWeights, setLocalWeights] = useState(config.weights);
   const [localPrompt, setLocalPrompt] = useState(config.promptTemplate);
   const [activeTab, setActiveTab] = useState("weights");
   const [isOverride, setIsOverride] = useState(false);
   const [promptChatInput, setPromptChatInput] = useState("");
-  const [promptChatHistory, setPromptChatHistory] = useState<any[]>([]);
+  const [promptChatHistory, setPromptChatHistory] = useState<ChatMessage[]>(
+    []
+  );
 
   // 计算总权重
   const totalWeight = useMemo(
@@ -36,7 +51,7 @@ export const ConfigDetailEditor = ({
   );
   const isWeightValid = Math.abs(totalWeight - 100) < 0.1;
 
-  const handleWeightChange = (id, newValue) => {
+  const handleWeightChange = (id: string, newValue: number) => {
     const validValue = Math.max(0, Math.min(100, newValue));
     const newWeights = localWeights.map((w) =>
       w.id === id ? { ...w, value: validValue } : w
@@ -45,7 +60,7 @@ export const ConfigDetailEditor = ({
     setIsOverride(true);
   };
 
-  const handleImportConfig = (targetConfigId) => {
+  const handleImportConfig = (targetConfigId: string) => {
     const target = allConfigs.find((c) => c.id === targetConfigId);
     if (target) {
       setLocalWeights(target.weights);
@@ -56,7 +71,7 @@ export const ConfigDetailEditor = ({
 
   const handlePromptChatSend = () => {
     if (!promptChatInput.trim()) return;
-    const newHistory = [
+    const newHistory: ChatMessage[] = [
       ...promptChatHistory,
       { role: "user", content: promptChatInput },
     ];
@@ -77,7 +92,7 @@ export const ConfigDetailEditor = ({
     }, 800);
   };
 
-  const handleSave = (isNew) => {
+  const handleSave = (isNew: boolean) => {
     // 门控机制：如果总和不为100，禁止保存
     if (!isWeightValid) {
       return;

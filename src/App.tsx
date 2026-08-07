@@ -3,6 +3,15 @@ import { useState, useMemo, useEffect } from "react";
 import { MOCK_CONFIGS } from "./data/configs";
 import { MOCK_OLD_DATA } from "./data/operations";
 import { MOCK_EXTENDED_PROJECTS } from "./data/projects";
+import {
+  FilterCondition,
+  FinancialTransactionFilter,
+  Project,
+  ScoringConfig,
+  TabKey,
+  Tenant,
+  WeightItem,
+} from "./types";
 
 import { QuotaAdjustDrawer } from "./components/common/QuotaDrawer";
 import { Header } from "./components/layout/Header";
@@ -33,21 +42,25 @@ import {
 // ==========================================
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState("dashboard"); // Default to dashboard for tenant view
+  const [activeTab, setActiveTab] = useState<TabKey>("dashboard"); // Default to dashboard for tenant view
   const [activeConfigId, setActiveConfigId] = useState("CONF-001");
-  const [configs, setConfigs] = useState(MOCK_CONFIGS);
+  const [configs, setConfigs] = useState<ScoringConfig[]>(MOCK_CONFIGS);
 
   // 状态管理
   const [isAdmin, setIsAdmin] = useState(false); // 默认为租户视角
   const [showPromptOptimizer, setShowPromptOptimizer] = useState(false);
-  const [editingConfig, setEditingConfig] = useState<any>(null);
-  const [selectedProject, setSelectedProject] = useState<any>(null);
+  const [editingConfig, setEditingConfig] = useState<ScoringConfig | null>(
+    null
+  );
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
-  const [activeTenant, setActiveTenant] = useState<any>(null);
+  const [activeTenant, setActiveTenant] = useState<Tenant | null>(null);
 
   // 筛选器状态
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false);
-  const [filterConditions, setFilterConditions] = useState<any[]>([]);
+  const [filterConditions, setFilterConditions] = useState<FilterCondition[]>(
+    []
+  );
 
   // 项目库搜索状态
   const [projectSearchText, setProjectSearchText] = useState("");
@@ -62,7 +75,7 @@ export default function App() {
 
   // 收入流水筛选状态
   const [financialTransactionType, setFinancialTransactionType] =
-    useState("全部");
+    useState<FinancialTransactionFilter>("全部");
 
   // 生态服务分润的展开/折叠状态
   const [isEcoServiceExpanded, setIsEcoServiceExpanded] = useState(false);
@@ -79,7 +92,12 @@ export default function App() {
     }
   }, [isAdmin, activeTab]);
 
-  const updateConfig = (id, newWeights, newPrompt, isNewVersion) => {
+  const updateConfig = (
+    id: string,
+    newWeights: WeightItem[],
+    newPrompt: string,
+    isNewVersion: boolean
+  ) => {
     if (isNewVersion) {
       const original = configs.find((c) => c.id === id);
       if (!original) return;
@@ -104,7 +122,7 @@ export default function App() {
     }
   };
 
-  const handleConfigGenerated = (newConfig) => {
+  const handleConfigGenerated = (newConfig: ScoringConfig) => {
     setConfigs([...configs, newConfig]);
     setActiveConfigId(newConfig.id);
     setActiveTab("project_library");
@@ -126,7 +144,7 @@ export default function App() {
           allConfigs={configs}
           onClose={() => setEditingConfig(null)}
           onUpdate={updateConfig}
-          onApply={(id) => setActiveConfigId(id)}
+          onApply={(id: string) => setActiveConfigId(id)}
         />
       )}
       {selectedProject && (
@@ -261,7 +279,7 @@ export default function App() {
           {activeTab === "quota" && (
             <QuotaPage
               tenants={MOCK_OLD_DATA.tenants}
-              onAdjustQuota={(tenant) => {
+              onAdjustQuota={(tenant: Tenant) => {
                 setActiveTenant(tenant);
                 setDrawerOpen(true);
               }}

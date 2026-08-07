@@ -3,7 +3,17 @@ import {
   Zap,
 } from "lucide-react";
 
-export const Header = ({ activeTab, isAdmin, currentConfigName }) => {
+import { TabKey } from "../../types";
+
+export const Header = ({
+  activeTab,
+  isAdmin,
+  currentConfigName,
+}: {
+  activeTab: TabKey;
+  isAdmin: boolean;
+  currentConfigName: string;
+}) => {
   return (
     <header className="h-16 bg-white border-b border-slate-200 px-8 flex items-center justify-between z-10 shrink-0">
       <div className="flex items-center gap-4">

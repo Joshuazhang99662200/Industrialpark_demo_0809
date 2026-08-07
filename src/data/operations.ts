@@ -1,7 +1,9 @@
+import { OperationsData } from "../types";
+
 // ==========================================
 // --- 1. 基础运营数据 (Legacy / 修复项) ---
 // ==========================================
-export const MOCK_OLD_DATA = {
+export const MOCK_OLD_DATA: OperationsData = {
   tasks: [
     {
       id: "FLOW-241024-01",

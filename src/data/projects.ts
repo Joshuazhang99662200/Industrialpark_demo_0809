@@ -1,9 +1,11 @@
+import { Project } from "../types";
+
 // ==========================================
 // --- 3. Mock Data Generation (核心业务扩充) ---
 // ==========================================
 
 // 基础 18 个种子数据，增加了企名片相关字段
-export const SEED_PROJECTS = [
+export const SEED_PROJECTS: Project[] = [
   {
     id: "BP-2401",
     name: "智航低空物流网络",
@@ -787,8 +789,8 @@ export const SEED_PROJECTS = [
 
 // --- Mock Data Expansion Logic (数据扩充逻辑) ---
 // 目标：将种子数据精确扩充到 3596 个，保持逻辑一致性但具有唯一ID
-export const generateExtendedProjects = () => {
-  const extended: any[] = [];
+export const generateExtendedProjects = (): Project[] => {
+  const extended: Project[] = [];
 
   // 辅助数组，用于随机化
   const locations = [

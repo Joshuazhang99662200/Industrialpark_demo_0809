@@ -3,7 +3,11 @@ import {
   PieChart,
 } from "lucide-react";
 
-export const EcosystemDashboardPage = ({ onNavigateToConnect }) => {
+export const EcosystemDashboardPage = ({
+  onNavigateToConnect,
+}: {
+  onNavigateToConnect: () => void;
+}) => {
   return (
     <div className="space-y-6 animate-in fade-in duration-500">
       {/* 页面头部 */}

@@ -5,15 +5,20 @@ import { useMemo } from "react";
 
 import { BUSINESS_ORDERS } from "../data/business";
 import { ECOSYSTEM_TRANSACTIONS } from "../data/ecosystem";
+import { FinancialTransaction, FinancialTransactionFilter } from "../types";
 
 export const FinancialTransactionsPage = ({
   transactionType,
   onTransactionTypeChange,
+}: {
+  transactionType: FinancialTransactionFilter;
+  onTransactionTypeChange: (value: FinancialTransactionFilter) => void;
 }) => {
   // 收入流水筛选逻辑（合并业务流水和生态流水）
   const allFinancialTransactions = useMemo(() => {
     // 将业务流水转换为统一格式（计算分润金额）
-    const businessTrans = BUSINESS_ORDERS.map((order) => ({
+    const businessTrans = BUSINESS_ORDERS.map(
+      (order): FinancialTransaction => ({
       id: order.id,
       type: "科技产品",
       projectName: order.projectName,
@@ -24,12 +29,14 @@ export const FinancialTransactionsPage = ({
         order.status === "已完成" ? order.amount * order.profitRate : 0, // 根据profitRate计算分润
       time: order.uploadTime,
       status: order.status,
-      uploader: order.uploader,
-      paymentMethod: order.paymentMethod,
-    }));
+        uploader: order.uploader,
+        paymentMethod: order.paymentMethod,
+      })
+    );
 
     // 将生态流水转换为统一格式
-    const ecoTrans = ECOSYSTEM_TRANSACTIONS.map((trans) => ({
+    const ecoTrans = ECOSYSTEM_TRANSACTIONS.map(
+      (trans): FinancialTransaction => ({
       id: trans.id,
       type: "生态服务",
       projectName: trans.projectName,
@@ -39,9 +46,10 @@ export const FinancialTransactionsPage = ({
       profitShare: trans.profitShare,
       time: trans.createdAt,
       status: trans.dealStatus,
-      partnerName: trans.partnerName,
-      progress: trans.progress,
-    }));
+        partnerName: trans.partnerName,
+        progress: trans.progress,
+      })
+    );
 
     return [...businessTrans, ...ecoTrans];
   }, []);
@@ -80,7 +88,7 @@ export const FinancialTransactionsPage = ({
         <div className="p-6 border-b border-slate-100 flex justify-between items-center bg-slate-50/50">
           <h3 className="font-bold text-slate-800">收入流水明细</h3>
           <div className="flex gap-2">
-            {["全部", "科技产品", "生态服务"].map((type) => (
+            {(["全部", "科技产品", "生态服务"] as const).map((type) => (
               <button
                 key={type}
                 onClick={() => onTransactionTypeChange(type)}
