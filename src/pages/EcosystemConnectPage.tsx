@@ -107,7 +107,7 @@ export const EcosystemConnectPage = ({
             <option value="FA顾问">FA顾问</option>
             <option value="品牌PR">品牌PR</option>
             <option value="人才">人才</option>
-            <option value="数据">数据</option>
+            <option value="数据服务">数据服务</option>
             <option value="云资源">云资源</option>
           </select>
           <select

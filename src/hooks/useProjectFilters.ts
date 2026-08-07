@@ -26,8 +26,7 @@ export const useProjectFilters = (
         return (
           project.name.toLowerCase().includes(searchLower) ||
           project.companyName?.toLowerCase().includes(searchLower) ||
-          // TODO: 部分种子数据没有 uploaderName，这里先维持原有行为
-          (project.uploaderName as string).toLowerCase().includes(searchLower) ||
+          project.uploaderName?.toLowerCase().includes(searchLower) ||
           project.id.toLowerCase().includes(searchLower) ||
           project.track.toLowerCase().includes(searchLower) ||
           project.tags.some((tag) => tag.toLowerCase().includes(searchLower))

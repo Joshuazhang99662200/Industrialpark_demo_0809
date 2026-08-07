@@ -1,3 +1,4 @@
+import { jitterAmount } from "../lib/currency";
 import { Project } from "../types";
 
 // ==========================================
@@ -828,11 +829,7 @@ export const generateExtendedProjects = (): Project[] => {
               `(${String.fromCharCode(65 + (i % 26))})科技有限公司`
             )
           : project.companyName,
-        revenue: isCopy
-          ? `${
-              parseInt(project.revenue) + Math.floor(Math.random() * 100 - 50)
-            }万`
-          : project.revenue,
+        revenue: isCopy ? jitterAmount(project.revenue) : project.revenue,
         location: isCopy
           ? `${locations[Math.floor(Math.random() * locations.length)]}`
           : project.location,
@@ -863,9 +860,7 @@ export const generateExtendedProjects = (): Project[] => {
         "有限公司",
         "(Extra)科技有限公司"
       ),
-      revenue: `${
-        parseInt(project.revenue) + Math.floor(Math.random() * 100 - 50)
-      }万`,
+      revenue: jitterAmount(project.revenue),
       location: `${locations[Math.floor(Math.random() * locations.length)]}`,
       submitTime: `2024-02-${String(
         Math.floor(Math.random() * 28) + 1

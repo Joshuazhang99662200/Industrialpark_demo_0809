@@ -37,6 +37,9 @@ import {
   UsersPage,
 } from "./pages";
 
+// 仅管理员可见的页面，切回租户视角时需要跳走
+const ADMIN_ONLY_TABS: TabKey[] = ["tenants", "ecosystem_partners"];
+
 // ==========================================
 // --- 主应用组件 ---
 // ==========================================
@@ -87,7 +90,7 @@ export default function App() {
 
   // 监听身份切换，如果切换为普通用户且当前在管理员独有页面，则跳转
   useEffect(() => {
-    if (!isAdmin && activeTab === "tenants") {
+    if (!isAdmin && ADMIN_ONLY_TABS.includes(activeTab)) {
       setActiveTab("dashboard");
     }
   }, [isAdmin, activeTab]);

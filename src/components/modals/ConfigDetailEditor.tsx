@@ -52,7 +52,11 @@ export const ConfigDetailEditor = ({
   const isWeightValid = Math.abs(totalWeight - 100) < 0.1;
 
   const handleWeightChange = (id: string, newValue: number) => {
-    const validValue = Math.max(0, Math.min(100, newValue));
+    // 数字输入框被清空时 parseFloat 会得到 NaN，按 0 处理，
+    // 否则总权重会变成 NaN 并把保存按钮永久锁死
+    const validValue = Number.isNaN(newValue)
+      ? 0
+      : Math.max(0, Math.min(100, newValue));
     const newWeights = localWeights.map((w) =>
       w.id === id ? { ...w, value: validValue } : w
     );
