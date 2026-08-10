@@ -57,6 +57,37 @@ export const ProjectLibraryPage = ({
     <div className="space-y-6 animate-in fade-in duration-500">
       {/* 搜索框和筛选器同行布局 */}
       <div className="flex gap-4 items-center">
+        {/* 批量上传按钮 */}
+        <div className="flex justify-center">
+          <button
+            onClick={onOpenBatchUpload}
+            className="group flex items-center gap-3 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all"
+          >
+            <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center group-hover:bg-white/30 transition-all">
+              <Plus size={20} />
+            </div>
+            批量上传项目
+          </button>
+        </div>
+
+        {/* 筛选器 - 25% 宽度 */}
+        <button
+          onClick={onOpenFilter}
+          className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold transition-all shadow-sm border ${
+            filterConditions.length > 0
+              ? "bg-indigo-50 border-indigo-200 text-indigo-700"
+              : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
+          }`}
+        >
+          <Filter size={16} />
+          高级筛选
+          {filterConditions.length > 0 && (
+            <span className="bg-indigo-600 text-white text-[10px] px-1.5 rounded-full">
+              {filterConditions.length}
+            </span>
+          )}
+        </button>
+
         {/* 搜索框 - 75% 宽度 */}
         <div className="flex-[3]">
           <div className="relative">
@@ -82,23 +113,6 @@ export const ProjectLibraryPage = ({
           </div>
         </div>
 
-        {/* 筛选器 - 25% 宽度 */}
-        <button
-          onClick={onOpenFilter}
-          className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-bold transition-all shadow-sm border ${
-            filterConditions.length > 0
-              ? "bg-indigo-50 border-indigo-200 text-indigo-700"
-              : "bg-white border-slate-200 text-slate-600 hover:bg-slate-50"
-          }`}
-        >
-          <Filter size={16} />
-          高级筛选
-          {filterConditions.length > 0 && (
-            <span className="bg-indigo-600 text-white text-[10px] px-1.5 rounded-full">
-              {filterConditions.length}
-            </span>
-          )}
-        </button>
       </div>
 
       {/* 项目统计信息 */}
@@ -306,19 +320,6 @@ export const ProjectLibraryPage = ({
             </button>
           </div>
         </div>
-      </div>
-
-      {/* 批量上传按钮 */}
-      <div className="flex justify-center">
-        <button
-          onClick={onOpenBatchUpload}
-          className="group flex items-center gap-3 px-6 py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-bold shadow-lg hover:shadow-xl transition-all"
-        >
-          <div className="w-8 h-8 bg-white/20 rounded-lg flex items-center justify-center group-hover:bg-white/30 transition-all">
-            <Plus size={20} />
-          </div>
-          批量上传项目
-        </button>
       </div>
     </div>
   );
